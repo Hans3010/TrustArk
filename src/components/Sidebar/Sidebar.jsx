@@ -134,7 +134,10 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
 
         {/* User Area */}
         <div className="h-[52px] bg-[#232428] px-2 flex items-center">
-          <div className="flex items-center flex-1 min-w-0">
+          <button 
+            onClick={() => setCurrentPage('profile')}
+            className="flex items-center flex-1 min-w-0 hover:bg-[#404249] rounded px-1 py-1 transition-colors duration-200"
+          >
             <div className="w-8 h-8 rounded-full bg-[#c1ff72] flex items-center justify-center mr-2">
               <span className="text-[#000] text-sm font-bold">U</span>
             </div>
@@ -144,14 +147,8 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
               </div>
               <div className="text-[#949ba4] text-xs truncate">En línea</div>
             </div>
-          </div>
+          </button>
           <div className="flex items-center space-x-2">
-            <button className="w-8 h-8 rounded hover:bg-[#4f545c] flex items-center justify-center text-[#b5bac1] hover:text-[#dcddde]">
-              🎙️
-            </button>
-            <button className="w-8 h-8 rounded hover:bg-[#4f545c] flex items-center justify-center text-[#b5bac1] hover:text-[#dcddde]">
-              🎧
-            </button>
             <button className="w-8 h-8 rounded hover:bg-[#4f545c] flex items-center justify-center text-[#b5bac1] hover:text-[#dcddde]">
               ⚙️
             </button>

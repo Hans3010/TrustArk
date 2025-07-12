@@ -4,6 +4,7 @@ import Desarrollo from './pages/Desarrollo';
 import Diseno from './pages/Diseno';
 import Marketing from './pages/Marketing';
 import Finanzas from './pages/Finanzas';
+import Profile from './pages/Profile';
 // Páginas específicas de exámenes
 
 import MiScore from './pages/MiScore';
@@ -29,6 +30,10 @@ function App() {
         return <Marketing />;
       case 'finanzas':
         return <Finanzas />;
+
+      // Perfil del usuario
+      case 'profile':
+        return <Profile />;
 
       // Páginas del home
       case 'mi-score':
