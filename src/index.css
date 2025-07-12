@@ -4,10 +4,3 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-body {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #073b4c;
-  color: #e4dfda;
-  overflow: hidden;
-}
