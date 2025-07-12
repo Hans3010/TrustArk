@@ -1,28 +1,47 @@
 import Layout from './components/Layout/Layout';
-import Dashboard from './pages/Dashboard';
-import Analytics from './pages/Analytics';
-import Users from './pages/Users';
-import Settings from './pages/Settings';
-import Messages from './pages/Messages';
+import Home from './pages/Home';
+import Desarrollo from './pages/Desarrollo';
+import Diseno from './pages/Diseno';
+import Marketing from './pages/Marketing';
+import Finanzas from './pages/Finanzas';
+// Páginas específicas de exámenes
+
+import MiScore from './pages/MiScore';
+import Leaderboard from './pages/Leaderboard';
+/*
+import Certificados from './pages/Certificados';
+import MiNft from './pages/MiNft';*/
 import useNavigation from './hooks/useNavigation';
 
 function App() {
-  const { currentPage, setCurrentPage } = useNavigation('dashboard');
+  const { currentPage, setCurrentPage } = useNavigation('home');
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'analytics':
-        return <Analytics />;
-      case 'users':
-        return <Users />;
-      case 'settings':
-        return <Settings />;
-      case 'messages':
-        return <Messages />;
+      // Páginas principales
+      case 'home':
+        return <Home />;
+      case 'desarrollo':
+        return <Desarrollo />;
+      case 'diseno':
+        return <Diseno />;
+      case 'marketing':
+        return <Marketing />;
+      case 'finanzas':
+        return <Finanzas />;
+
+      // Páginas del home
+      case 'mi-score':
+        return <MiScore />;
+      case 'leaderboard':
+        return <Leaderboard />;
+      /* case 'certificados':
+        return <Certificados />;
+      case 'mi-nft':
+        return <MiNft />;*/
+
       default:
-        return <Dashboard />;
+        return <Home />;
     }
   };
 

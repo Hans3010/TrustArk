@@ -1,42 +1,52 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const Sidebar = ({ currentPage, setCurrentPage }) => {
-  const [selectedServer, setSelectedServer] = useState('dashboard');
+  const [selectedServer, setSelectedServer] = useState('home');
 
   const servers = [
-    { id: 'dashboard', icon: '🏠', name: 'Dashboard', color: '#c1ff72' },
-    { id: 'analytics', icon: '📊', name: 'Analytics', color: '#4CAF50' },
-    { id: 'users', icon: '�', name: 'Users', color: '#2196F3' },
-    { id: 'settings', icon: '⚙️', name: 'Settings', color: '#FF9800' },
-    { id: 'messages', icon: '💬', name: 'Messages', color: '#9C27B0' },
+    { id: 'home', icon: '🏠', name: 'Home', color: '#c1ff72' },
+    { id: 'desarrollo', icon: '�', name: 'Desarrollo', color: '#4CAF50' },
+    { id: 'diseno', icon: '🎨', name: 'Diseño', color: '#2196F3' },
+    { id: 'marketing', icon: '📈', name: 'Marketing', color: '#FF9800' },
+    { id: 'finanzas', icon: '�', name: 'Finanzas', color: '#9C27B0' },
   ];
 
   const getServerChannels = (serverId) => {
     const channels = {
-      dashboard: [
-        { id: 'overview', name: 'overview', icon: '#' },
-        { id: 'stats', name: 'estadísticas', icon: '#' },
-        { id: 'reports', name: 'reportes', icon: '#' },
+      home: [
+        { id: 'mi-score', name: 'mi-score', icon: '⭐' },
+        { id: 'leaderboard', name: 'tabla-posiciones', icon: '🏆' },
+        { id: 'certificados', name: 'mis-certificados', icon: '📜' },
+        { id: 'nft', name: 'mi-nft', icon: '🎖️' },
       ],
-      analytics: [
-        { id: 'charts', name: 'gráficos', icon: '#' },
-        { id: 'data', name: 'datos', icon: '#' },
-        { id: 'insights', name: 'insights', icon: '#' },
+      desarrollo: [
+        { id: 'frontend', name: 'frontend', icon: '🌐' },
+        { id: 'backend', name: 'backend', icon: '⚙️' },
+        { id: 'fullstack', name: 'fullstack', icon: '🔗' },
+        { id: 'mobile', name: 'mobile', icon: '📱' },
+        { id: 'devops', name: 'devops', icon: '🚀' },
+        { id: 'blockchain', name: 'blockchain', icon: '⛓️' },
       ],
-      users: [
-        { id: 'active', name: 'usuarios-activos', icon: '#' },
-        { id: 'pending', name: 'pendientes', icon: '#' },
-        { id: 'banned', name: 'bloqueados', icon: '#' },
+      diseno: [
+        { id: 'ui-ux', name: 'ui-ux', icon: '🎭' },
+        { id: 'grafico', name: 'diseño-gráfico', icon: '🖼️' },
+        { id: 'web', name: 'diseño-web', icon: '🎨' },
+        { id: 'producto', name: 'diseño-producto', icon: '📐' },
+        { id: 'branding', name: 'branding', icon: '🏷️' },
       ],
-      settings: [
-        { id: 'general', name: 'general', icon: '#' },
-        { id: 'security', name: 'seguridad', icon: '#' },
-        { id: 'permissions', name: 'permisos', icon: '#' },
+      marketing: [
+        { id: 'digital', name: 'marketing-digital', icon: '📊' },
+        { id: 'social-media', name: 'redes-sociales', icon: '📲' },
+        { id: 'seo', name: 'seo-sem', icon: '🔍' },
+        { id: 'contenido', name: 'marketing-contenido', icon: '✍️' },
+        { id: 'email', name: 'email-marketing', icon: '📧' },
       ],
-      messages: [
-        { id: 'inbox', name: 'bandeja-entrada', icon: '#' },
-        { id: 'sent', name: 'enviados', icon: '#' },
-        { id: 'drafts', name: 'borradores', icon: '#' },
+      finanzas: [
+        { id: 'contabilidad', name: 'contabilidad', icon: '📋' },
+        { id: 'inversion', name: 'inversiones', icon: '📈' },
+        { id: 'analisis', name: 'análisis-financiero', icon: '💹' },
+        { id: 'criptomonedas', name: 'criptomonedas', icon: '₿' },
+        { id: 'fintech', name: 'fintech', icon: '🏦' },
       ],
     };
     return channels[serverId] || [];
@@ -101,7 +111,9 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
           <div className="mb-4">
             <div className="px-2 mb-1">
               <h3 className="text-[#949ba4] text-xs font-semibold uppercase tracking-wide">
-                Canales de texto
+                {selectedServer === 'home'
+                  ? 'Panel Principal'
+                  : 'Áreas de Evaluación'}
               </h3>
             </div>
             {getServerChannels(selectedServer).map((channel) => (
