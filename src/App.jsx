@@ -5,6 +5,8 @@ import Diseno from './pages/Diseno';
 import Marketing from './pages/Marketing';
 import Finanzas from './pages/Finanzas';
 import Profile from './pages/Profile';
+import ProfileStats from './pages/ProfileStats';
+import ProfileEdit from './pages/ProfileEdit';
 // Páginas específicas de exámenes
 
 import MiScore from './pages/MiScore';
@@ -34,6 +36,18 @@ function App() {
       // Perfil del usuario
       case 'profile':
         return <Profile />;
+      case 'profile-overview':
+        return <Profile />;
+      case 'profile-stats':
+        return <ProfileStats />;
+      case 'profile-edit':
+        return <ProfileEdit />;
+      case 'profile-certificates':
+        return <Profile />; // Por ahora redirige al perfil principal
+      case 'profile-exams':
+        return <Profile />; // Por ahora redirige al perfil principal
+      case 'profile-achievements':
+        return <Profile />; // Por ahora redirige al perfil principal
 
       // Páginas del home
       case 'mi-score':
