@@ -1,4 +1,4 @@
-import logo from '../assets/logo.png';
+import logo from "../assets/Logo.png";
 
 const Home = () => {
   return (
@@ -6,9 +6,7 @@ const Home = () => {
       {/* Logotipo y slogan - Componente principal superior */}
       <div className="bg-[#222222] p-8 rounded-lg border border-[#073b4c] text-center">
         <div className="flex flex-col items-center justify-center space-y-4">
-          <img src={logo} alt="TrustArk Logo" className="h-24 w-auto" />
-
-          <div className="text-6xl font-bold text-[#c1ff72]">TrustArk</div>
+          <img src={logo} alt="TrustArk Logo" className="h-132 w-auto" />
           <p className="text-xl text-[#e4dfda] opacity-90">
             Tu plataforma de confianza para el futuro digital
           </p>
@@ -63,25 +61,29 @@ const Home = () => {
           <div className="flex space-x-6">
             <a
               href="#"
-              className="flex items-center space-x-2 text-[#e4dfda] hover:text-[#c1ff72] transition-colors">
+              className="flex items-center space-x-2 text-[#e4dfda] hover:text-[#c1ff72] transition-colors"
+            >
               <span className="text-xl">🐦</span>
               <span>Twitter</span>
             </a>
             <a
               href="#"
-              className="flex items-center space-x-2 text-[#e4dfda] hover:text-[#c1ff72] transition-colors">
+              className="flex items-center space-x-2 text-[#e4dfda] hover:text-[#c1ff72] transition-colors"
+            >
               <span className="text-xl">📱</span>
               <span>Instagram</span>
             </a>
             <a
               href="#"
-              className="flex items-center space-x-2 text-[#e4dfda] hover:text-[#c1ff72] transition-colors">
+              className="flex items-center space-x-2 text-[#e4dfda] hover:text-[#c1ff72] transition-colors"
+            >
               <span className="text-xl">💼</span>
               <span>LinkedIn</span>
             </a>
             <a
               href="#"
-              className="flex items-center space-x-2 text-[#e4dfda] hover:text-[#c1ff72] transition-colors">
+              className="flex items-center space-x-2 text-[#e4dfda] hover:text-[#c1ff72] transition-colors"
+            >
               <span className="text-xl">🌐</span>
               <span>Website</span>
             </a>
