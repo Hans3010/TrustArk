@@ -6,7 +6,7 @@ const Layout = ({ children, currentPage, setCurrentPage }) => {
     <div className="flex h-screen bg-[#E4DFDA]">
       {/* Sidebar - Discord Style */}
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-
+      <div className="w-30"></div>
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header mejorado con Material UI */}

@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 const Sidebar = ({ currentPage, setCurrentPage }) => {
-  const [selectedServer, setSelectedServer] = useState("home");
+  const [selectedServer, setSelectedServer] = useState('home');
 
   const servers = [
     { id: "home", icon: "🏠", name: "Dashboard", color: "#c1ff72" },
