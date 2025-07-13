@@ -1,5 +1,4 @@
 import Layout from './components/Layout/Layout';
-import Home from './pages/Home';
 import Desarrollo from './pages/Desarrollo';
 import Diseno from './pages/Diseno';
 import Marketing from './pages/Marketing';
@@ -8,12 +7,9 @@ import Profile from './pages/Profile';
 import ProfileStats from './pages/ProfileStats';
 import ProfileEdit from './pages/ProfileEdit';
 // Páginas específicas de exámenes
-
+import ExamPage from './pages/ExamPage';
 import MiScore from './pages/MiScore';
 import Leaderboard from './pages/Leaderboard';
-/*
-import Certificados from './pages/Certificados';
-import MiNft from './pages/MiNft';*/
 import useNavigation from './hooks/useNavigation';
 
 function App() {
@@ -22,8 +18,8 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       // Páginas principales
-      case 'home':
-        return <Home />;
+      case 'profile':
+        return <Profile />;
       case 'desarrollo':
         return <Desarrollo />;
       case 'diseno':
@@ -34,30 +30,66 @@ function App() {
         return <Finanzas />;
 
       // Perfil del usuario
-      case 'profile':
-        return <Profile />;
-      case 'profile-overview':
-        return <Profile />;
       case 'profile-stats':
         return <ProfileStats />;
       case 'profile-edit':
         return <ProfileEdit />;
-      case 'profile-certificates':
-        return <Profile />; // Por ahora redirige al perfil principal
-      case 'profile-exams':
-        return <Profile />; // Por ahora redirige al perfil principal
-      case 'profile-achievements':
-        return <Profile />; // Por ahora redirige al perfil principal
 
-      // Páginas del home
+      // Exámenes específicos de desarrollo
+      case 'javascript-course':
+        return <ExamPage examType="javascript" />;
+      case 'python-course':
+        return <ExamPage examType="python" />;
+      case 'react-course':
+        return <ExamPage examType="react" />;
+      case 'solidity-course':
+        return <ExamPage examType="solidity" />;
+      case 'blockchain-course':
+        return <ExamPage examType="blockchain" />;
+      case 'devops-course':
+        return <ExamPage examType="devops" />;
+
+      // Exámenes de diseño
+      case 'ui-ux-course':
+        return <ExamPage examType="ui-ux" />;
+      case 'nft-design':
+        return <ExamPage examType="nft-design" />;
+      case 'figma-course':
+        return <ExamPage examType="figma" />;
+      case '3d-design':
+        return <ExamPage examType="3d-design" />;
+      case 'branding-course':
+        return <ExamPage examType="branding" />;
+
+      // Exámenes de marketing
+      case 'crypto-marketing':
+        return <ExamPage examType="crypto-marketing" />;
+      case 'community-course':
+        return <ExamPage examType="community" />;
+      case 'defi-marketing':
+        return <ExamPage examType="defi-marketing" />;
+      case 'social-web3':
+        return <ExamPage examType="social-web3" />;
+      case 'analytics-course':
+        return <ExamPage examType="analytics" />;
+
+      // Exámenes de finanzas
+      case 'defi-course':
+        return <ExamPage examType="defi" />;
+      case 'trading-course':
+        return <ExamPage examType="trading" />;
+      case 'yield-farming':
+        return <ExamPage examType="yield-farming" />;
+      case 'portfolio-course':
+        return <ExamPage examType="portfolio" />;
+      case 'tokenomics':
+        return <ExamPage examType="tokenomics" />;
+
+      // Páginas del perfil
       case 'mi-score':
         return <MiScore />;
       case 'leaderboard':
         return <Leaderboard />;
-      /* case 'certificados':
-        return <Certificados />;
-      case 'mi-nft':
-        return <MiNft />;*/
 
       default:
         return <Profile />;
