@@ -6,11 +6,11 @@ const Home = () => {
       {/* Logotipo y slogan - Componente principal superior */}
       <div className="bg-[#e4dfda] p-8 rounded-lg border border-[#c1ff72] text-center">
         <div className="flex flex-col items-center justify-center space-y-4">
-          <img src={logo} alt="TrustArk Logo" className="h-132 w-auto" />
-          <p className="text-xl text-[#e4dfda] opacity-90">
+          <img src={logo} alt="TrustArk Logo" className="h-75 w-auto" />
+          <p className="text-xl text-[#001826] opacity-90">
             Tu plataforma de confianza para el futuro digital
           </p>
-          <p className="text-lg text-[#e4dfda] opacity-75 max-w-2xl">
+          <p className="text-lg text-[#001826] opacity-75 max-w-2xl">
             Conectamos, protegemos y potenciamos tu experiencia en el mundo
             digital con la máxima seguridad y transparencia.
           </p>

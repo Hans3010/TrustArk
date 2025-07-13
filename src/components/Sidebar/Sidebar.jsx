@@ -9,7 +9,7 @@ import {
   Divider,
 } from '@mui/material';
 import {
-  FaHome,
+  FaUser,
   FaCode,
   FaPaintBrush,
   FaChartLine,
@@ -40,15 +40,14 @@ import {
   FaClipboardList,
   FaCoins,
   FaPlus,
-  FaUser,
   FaCog,
 } from 'react-icons/fa';
 
 const Sidebar = ({ currentPage, setCurrentPage }) => {
-  const [selectedServer, setSelectedServer] = useState('home');
+  const [selectedServer, setSelectedServer] = useState('profile');
 
   const servers = [
-    { id: 'home', icon: FaHome, name: 'Home', color: '#c1ff72' },
+    { id: 'profile', icon: FaUser, name: 'Mi Perfil', color: '#c1ff72' },
     { id: 'desarrollo', icon: FaCode, name: 'Desarrollo', color: '#4CAF50' },
     { id: 'diseno', icon: FaPaintBrush, name: 'Diseño', color: '#E91E63' },
     { id: 'marketing', icon: FaChartLine, name: 'Marketing', color: '#FF9800' },
@@ -57,7 +56,7 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
 
   const getServerChannels = (serverId) => {
     const channels = {
-      home: [
+      profile: [
         { id: 'mi-score', name: 'Mi Puntaje', icon: FaStar },
         { id: 'leaderboard', name: 'Ranking Global', icon: FaTrophy },
         { id: 'certificados', name: 'NFT Certificados', icon: FaCertificate },
@@ -413,8 +412,8 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                 }}>
-                {selectedServer === 'home'
-                  ? 'Mi Dashboard Web3'
+                {selectedServer === 'profile'
+                  ? 'Mi Dashboard Personal'
                   : 'Cursos Disponibles'}
               </Typography>
             </Box>
@@ -532,7 +531,10 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
           zIndex: 10,
         }}>
         <Avatar
-          onClick={() => setCurrentPage('profile')}
+          onClick={() => {
+            setSelectedServer('profile');
+            setCurrentPage('profile');
+          }}
           sx={{
             width: 40,
             height: 40,

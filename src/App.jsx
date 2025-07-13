@@ -17,7 +17,7 @@ import MiNft from './pages/MiNft';*/
 import useNavigation from './hooks/useNavigation';
 
 function App() {
-  const { currentPage, setCurrentPage } = useNavigation('home');
+  const { currentPage, setCurrentPage } = useNavigation('profile');
 
   const renderPage = () => {
     switch (currentPage) {
@@ -60,7 +60,7 @@ function App() {
         return <MiNft />;*/
 
       default:
-        return <Home />;
+        return <Profile />;
     }
   };
 
