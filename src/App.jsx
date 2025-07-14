@@ -38,53 +38,53 @@ function App() {
 
       // Exámenes específicos de desarrollo
       case 'javascript-course':
-        return <ExamPage examType="javascript" />;
+        return <ExamPage examType="javascript" setCurrentPage={setCurrentPage} />;
       case 'python-course':
-        return <ExamPage examType="python" />;
+        return <ExamPage examType="python" setCurrentPage={setCurrentPage} />;
       case 'react-course':
-        return <ExamPage examType="react" />;
+        return <ExamPage examType="react" setCurrentPage={setCurrentPage} />;
       case 'solidity-course':
-        return <ExamPage examType="solidity" />;
+        return <ExamPage examType="solidity" setCurrentPage={setCurrentPage} />;
       case 'blockchain-course':
-        return <ExamPage examType="blockchain" />;
+        return <ExamPage examType="blockchain" setCurrentPage={setCurrentPage} />;
       case 'devops-course':
-        return <ExamPage examType="devops" />;
+        return <ExamPage examType="devops" setCurrentPage={setCurrentPage} />;
 
       // Exámenes de diseño
       case 'ui-ux-course':
-        return <ExamPage examType="ui-ux" />;
+        return <ExamPage examType="ui-ux" setCurrentPage={setCurrentPage} />;
       case 'nft-design':
-        return <ExamPage examType="nft-design" />;
+        return <ExamPage examType="nft-design" setCurrentPage={setCurrentPage} />;
       case 'figma-course':
-        return <ExamPage examType="figma" />;
+        return <ExamPage examType="figma" setCurrentPage={setCurrentPage} />;
       case '3d-design':
-        return <ExamPage examType="3d-design" />;
+        return <ExamPage examType="3d-design" setCurrentPage={setCurrentPage} />;
       case 'branding-course':
-        return <ExamPage examType="branding" />;
+        return <ExamPage examType="branding" setCurrentPage={setCurrentPage} />;
 
       // Exámenes de marketing
       case 'crypto-marketing':
-        return <ExamPage examType="crypto-marketing" />;
+        return <ExamPage examType="crypto-marketing" setCurrentPage={setCurrentPage} />;
       case 'community-course':
-        return <ExamPage examType="community" />;
+        return <ExamPage examType="community" setCurrentPage={setCurrentPage} />;
       case 'defi-marketing':
-        return <ExamPage examType="defi-marketing" />;
+        return <ExamPage examType="defi-marketing" setCurrentPage={setCurrentPage} />;
       case 'social-web3':
-        return <ExamPage examType="social-web3" />;
+        return <ExamPage examType="social-web3" setCurrentPage={setCurrentPage} />;
       case 'analytics-course':
-        return <ExamPage examType="analytics" />;
+        return <ExamPage examType="analytics" setCurrentPage={setCurrentPage} />;
 
       // Exámenes de finanzas
       case 'defi-course':
-        return <ExamPage examType="defi" />;
+        return <ExamPage examType="defi" setCurrentPage={setCurrentPage} />;
       case 'trading-course':
-        return <ExamPage examType="trading" />;
+        return <ExamPage examType="trading" setCurrentPage={setCurrentPage} />;
       case 'yield-farming':
-        return <ExamPage examType="yield-farming" />;
+        return <ExamPage examType="yield-farming" setCurrentPage={setCurrentPage} />;
       case 'portfolio-course':
-        return <ExamPage examType="portfolio" />;
+        return <ExamPage examType="portfolio" setCurrentPage={setCurrentPage} />;
       case 'tokenomics':
-        return <ExamPage examType="tokenomics" />;
+        return <ExamPage examType="tokenomics" setCurrentPage={setCurrentPage} />;
 
       // Páginas del perfil
       case 'mi-score':

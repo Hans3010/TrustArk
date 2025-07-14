@@ -16,6 +16,12 @@ import {
   RadioGroup,
   Alert,
   Divider,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Avatar,
+  Fade,
+  Grow,
 } from '@mui/material';
 import {
   FaClock,
@@ -32,15 +38,26 @@ import {
   FaRedoAlt,
   FaFlag,
   FaCheck,
+  FaTimes,
+  FaDownload,
+  FaShare,
+  FaGem,
+  FaUser,
+  FaCalendar,
+  FaStar,
 } from 'react-icons/fa';
+import useNavigation from '../hooks/useNavigation';
 
-const ExamPage = ({ examType }) => {
+const ExamPage = ({ examType, setCurrentPage: navigateToPage }) => {
+  const setCurrentPage = navigateToPage || useNavigation().setCurrentPage;
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(1800); // 30 minutos
   const [isExamStarted, setIsExamStarted] = useState(false);
   const [isExamCompleted, setIsExamCompleted] = useState(false);
   const [score, setScore] = useState(0);
+  const [showCertificate, setShowCertificate] = useState(false);
+  const [examResults, setExamResults] = useState(null);
 
   // Preguntas para JavaScript Completo
   const javascriptQuestions = [
@@ -214,9 +231,62 @@ const ExamPage = ({ examType }) => {
     });
 
     const finalScore = Math.round((correctAnswers / questions.length) * 100);
+    const passed = finalScore >= currentExam.passingScore;
+    
+    // Crear resultados del examen
+    const results = {
+      score: finalScore,
+      correctAnswers,
+      totalQuestions: questions.length,
+      passed,
+      examTitle: currentExam.title,
+      examType: examType,
+      completedAt: new Date().toISOString(),
+      certificateId: passed ? `CERT-${Date.now()}` : null,
+      stellarTxHash: passed ? `stellar_tx_${Date.now()}` : null
+    };
+
     setScore(finalScore);
+    setExamResults(results);
     setIsExamCompleted(true);
-  }, [questions, selectedAnswers]);
+
+    // Si aprobó, mostrar certificado después de un delay y guardarlo
+    if (passed) {
+      // Guardar certificado en localStorage
+      const certificate = {
+        id: results.certificateId,
+        name: `Certificado ${currentExam.title}`,
+        icon: '🏆',
+        rarity: finalScore >= 95 ? 'legendary' : finalScore >= 85 ? 'epic' : 'rare',
+        examType: examType,
+        score: finalScore,
+        stellarTxHash: results.stellarTxHash,
+        completedAt: results.completedAt,
+        description: `Certificación en ${currentExam.title} con ${finalScore}% de acierto`
+      };
+      
+      // Obtener certificados existentes del localStorage
+      const existingCertificates = JSON.parse(localStorage.getItem('userCertificates') || '[]');
+      
+      // Agregar el nuevo certificado
+      existingCertificates.push(certificate);
+      
+      // Guardar en localStorage
+      localStorage.setItem('userCertificates', JSON.stringify(existingCertificates));
+      
+      setTimeout(() => {
+        setShowCertificate(true);
+      }, 2000);
+    }
+
+    // Aquí harías la llamada a la API para guardar los resultados
+    try {
+      // await fetch('/api/exams/submit', { ... })
+      console.log('Resultados del examen:', results);
+    } catch (error) {
+      console.error('Error al enviar examen:', error);
+    }
+  }, [questions, selectedAnswers, currentExam, examType]);
 
   // Timer del examen
   useEffect(() => {
@@ -261,6 +331,260 @@ const ExamPage = ({ examType }) => {
   };
 
   const currentQ = questions[currentQuestion];
+
+  // Componente del Modal de Certificación NFT/POAP
+  const CertificateModal = () => (
+    <Dialog
+      open={showCertificate}
+      maxWidth="md"
+      fullWidth
+      onClose={() => setShowCertificate(false)}
+      PaperProps={{
+        sx: {
+          borderRadius: 4,
+          background: 'linear-gradient(135deg, #073B4C 0%, #0A5F73 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'hidden'
+        }
+      }}
+    >
+      {/* Efectos de fondo decorativos */}
+      <Box sx={{
+        position: 'absolute',
+        top: -20,
+        right: -20,
+        width: 100,
+        height: 100,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(193, 255, 114, 0.2) 0%, transparent 70%)',
+        zIndex: 1
+      }} />
+      <Box sx={{
+        position: 'absolute',
+        bottom: -30,
+        left: -30,
+        width: 120,
+        height: 120,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(193, 255, 114, 0.15) 0%, transparent 70%)',
+        zIndex: 1
+      }} />
+
+      <DialogContent sx={{ p: 0, position: 'relative', zIndex: 2 }}>
+        <IconButton
+          onClick={() => setShowCertificate(false)}
+          sx={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            color: 'white',
+            zIndex: 3
+          }}
+        >
+          <FaTimes />
+        </IconButton>
+
+        {/* Animación de celebración */}
+        <Box sx={{ textAlign: 'center', py: 4, px: 3 }}>
+          <Grow in={showCertificate} timeout={1000}>
+            <Box>
+              <FaTrophy style={{ 
+                fontSize: '4rem', 
+                color: '#C1FF72',
+                filter: 'drop-shadow(0 4px 8px rgba(193, 255, 114, 0.4))',
+                marginBottom: '16px'
+              }} />
+            </Box>
+          </Grow>
+
+          <Fade in={showCertificate} timeout={1500}>
+            <Typography variant="h3" fontWeight="bold" color="#C1FF72" sx={{ mb: 2 }}>
+              ¡Felicitaciones!
+            </Typography>
+          </Fade>
+
+          <Typography variant="h5" sx={{ mb: 3, opacity: 0.9 }}>
+            Has obtenido tu certificado NFT
+          </Typography>
+
+          {/* Certificado */}
+          <Card sx={{
+            background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 3,
+            border: '2px solid rgba(193, 255, 114, 0.3)',
+            backdropFilter: 'blur(10px)',
+            mb: 3,
+            p: 3
+          }}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={12} md={3} textAlign="center">
+                <Avatar
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    mx: 'auto',
+                    mb: 1,
+                    background: 'linear-gradient(45deg, #C1FF72, #A8E063)',
+                    color: '#073B4C'
+                  }}
+                >
+                  <FaCertificate style={{ fontSize: '2rem' }} />
+                </Avatar>
+                <Chip
+                  icon={<FaGem style={{ fontSize: '12px' }} />}
+                  label="NFT Certificate"
+                  size="small"
+                  sx={{
+                    backgroundColor: '#C1FF72',
+                    color: '#073B4C',
+                    fontWeight: 'bold'
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={9}>
+                <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>
+                  {examResults?.examTitle} - {examResults?.examType}
+                </Typography>
+                
+                <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <FaUser style={{ fontSize: '14px', opacity: 0.7 }} />
+                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                      Diego Guzman Montoya
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <FaCalendar style={{ fontSize: '14px', opacity: 0.7 }} />
+                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                      {new Date().toLocaleDateString('es-ES')}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                    <FaStar style={{ fontSize: '14px', color: '#C1FF72' }} />
+                    <Typography variant="body2" fontWeight="bold">
+                      {examResults?.score}%
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Typography variant="caption" sx={{ 
+                  fontFamily: 'monospace', 
+                  fontSize: '0.7rem',
+                  opacity: 0.6,
+                  display: 'block'
+                }}>
+                  Certificate ID: {examResults?.certificateId}
+                </Typography>
+                
+                <Typography variant="caption" sx={{ 
+                  fontFamily: 'monospace', 
+                  fontSize: '0.7rem',
+                  opacity: 0.6
+                }}>
+                  Stellar TX: {examResults?.stellarTxHash?.substring(0, 16)}...
+                </Typography>
+              </Grid>
+            </Grid>
+          </Card>
+
+          {/* Información del POAP */}
+          <Box sx={{
+            background: 'rgba(193, 255, 114, 0.1)',
+            borderRadius: 2,
+            p: 2,
+            mb: 3,
+            border: '1px solid rgba(193, 255, 114, 0.3)'
+          }}>
+            <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1, color: '#C1FF72' }}>
+              🎉 POAP Desbloqueado
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+              Tu certificado ha sido minteado como NFT en la blockchain de Stellar. 
+              Este POAP (Proof of Attendance Protocol) certifica tu logro de manera permanente y verificable.
+            </Typography>
+          </Box>
+        </Box>
+      </DialogContent>
+
+      <DialogActions sx={{ p: 3, gap: 2 }}>
+        <Button
+          variant="outlined"
+          startIcon={<FaDownload />}
+          onClick={() => {
+            // Lógica para descargar certificado
+            console.log('Descargando certificado...');
+          }}
+          sx={{
+            borderColor: '#C1FF72',
+            color: '#C1FF72',
+            '&:hover': {
+              borderColor: '#C1FF72',
+              backgroundColor: 'rgba(193, 255, 114, 0.1)'
+            }
+          }}
+        >
+          Descargar
+        </Button>
+
+        <Button
+          variant="outlined"
+          startIcon={<FaShare />}
+          onClick={() => {
+            // Lógica para compartir
+            console.log('Compartiendo certificado...');
+          }}
+          sx={{
+            borderColor: '#C1FF72',
+            color: '#C1FF72',
+            '&:hover': {
+              borderColor: '#C1FF72',
+              backgroundColor: 'rgba(193, 255, 114, 0.1)'
+            }
+          }}
+        >
+          Compartir
+        </Button>
+
+        <Button
+          variant="contained"
+          startIcon={<FaRocket />}
+          onClick={() => {
+            setShowCertificate(false);
+            setCurrentPage('profile');
+          }}
+          sx={{
+            backgroundColor: '#C1FF72',
+            color: '#073B4C',
+            fontWeight: 'bold',
+            '&:hover': {
+              backgroundColor: '#A8E063'
+            }
+          }}
+        >
+          Ver Perfil
+        </Button>
+
+        <Button
+          variant="contained"
+          onClick={() => {
+            setShowCertificate(false);
+            setCurrentPage('desarrollo');
+          }}
+          sx={{
+            backgroundColor: 'rgba(255,255,255,0.1)',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: 'rgba(255,255,255,0.2)'
+            }
+          }}
+        >
+          Seguir Aprendiendo
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 
   // Pantalla de inicio del examen
   if (!isExamStarted) {
@@ -722,12 +1046,19 @@ const ExamPage = ({ examType }) => {
         {/* Certificado NFT (solo si aprobó) */}
         {passed && (
           <Card
+            onClick={() => setShowCertificate(true)}
             sx={{
               borderRadius: 3,
               boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
               background: 'linear-gradient(135deg, #C1FF72 0%, #A8E85C 100%)',
               border: '2px solid #073B4C',
               mb: 4,
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              },
             }}>
             <CardContent sx={{ p: 4 }}>
               <Box
@@ -750,6 +1081,43 @@ const ExamPage = ({ examType }) => {
                     Has ganado una certificación verificable en blockchain para{' '}
                     {currentExam.title}
                   </Typography>
+                  <Box sx={{ mt: 2, display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowCertificate(true);
+                      }}
+                      sx={{
+                        borderColor: '#073B4C',
+                        color: '#073B4C',
+                        fontSize: '0.75rem',
+                        '&:hover': {
+                          borderColor: '#073B4C',
+                          backgroundColor: 'rgba(7, 59, 76, 0.1)',
+                        },
+                      }}>
+                      Ver Detalles
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentPage('profile');
+                      }}
+                      sx={{
+                        backgroundColor: '#073B4C',
+                        color: '#C1FF72',
+                        fontSize: '0.75rem',
+                        '&:hover': {
+                          backgroundColor: '#0A4F63',
+                        },
+                      }}>
+                      Ir a Perfil
+                    </Button>
+                  </Box>
                 </Box>
                 <Box sx={{ fontSize: '3rem' }}>
                   <FaCertificate />
@@ -815,7 +1183,7 @@ const ExamPage = ({ examType }) => {
               )}
               {passed && (
                 <Button
-                  onClick={() => window.location.reload()}
+                  onClick={() => setShowCertificate(true)}
                   variant="contained"
                   startIcon={<FaCertificate />}
                   sx={{
@@ -1158,6 +1526,18 @@ const ExamPage = ({ examType }) => {
           </Box>
         </CardContent>
       </Card>
+
+      {/* Modal de Certificado NFT */}
+      {showCertificate && examResults && (
+        <CertificateModal
+          open={showCertificate}
+          onClose={() => setShowCertificate(false)}
+          examTitle={examResults.examTitle}
+          score={examResults.score}
+          stellarTxHash={examResults.stellarTxHash}
+          certificateId={examResults.certificateId}
+        />
+      )}
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -16,7 +16,9 @@ import {
   TableRow,
   Container,
   Paper,
-  Divider
+  Divider,
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import {
   FaTrophy,
@@ -34,88 +36,201 @@ import {
 } from 'react-icons/fa';
 
 const Home = () => {
-  // Datos del usuario actual (datos personales)
-  const currentUser = {
-    name: 'Alex Rivera',
-    avatar: 'https://ui-avatars.io/api/?name=Alex+Rivera&background=073B4C&color=fff',
-    score: 2875,
-    rank: 3,
-    completedCourses: 12,
-    certificatesEarned: 8,
-    examsPassed: 24,
-    totalStudyHours: 187,
-    weeklyProgress: 85,
-    skillLevel: 'Advanced',
-    web3Verified: true
+  const [userData, setUserData] = useState(null);
+  const [examData, setExamData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Obtener datos del usuario
+      const userResponse = await fetch(
+        'https://hackaton-stellar-88871125366.us-central1.run.app/api/users/bxl2z9sEKACwTUpn4WbA'
+      );
+      const userResult = await userResponse.json();
+
+      // Obtener datos de exámenes
+      const examResponse = await fetch(
+        'https://hackaton-stellar-88871125366.us-central1.run.app/api/exams/user/u1'
+      );
+      const examResult = await examResponse.json();
+
+      if (userResult.success && examResult.success) {
+        setUserData(userResult.data);
+        setExamData(examResult.data);
+      } else {
+        throw new Error('Error al cargar los datos');
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Datos de la tabla de posiciones (ranking)
-  const leaderboard = [
-    { 
-      rank: 1, 
-      name: 'Sofia Chen', 
-      avatar: 'https://ui-avatars.io/api/?name=Sofia+Chen&background=27AE60&color=fff',
-      score: 3500, 
-      change: '+150', 
-      trend: 'up',
-      certificates: 15,
-      web3Address: '0x1a2b...3c4d'
-    },
-    { 
-      rank: 2, 
-      name: 'Carlos Mendoza', 
-      avatar: 'https://ui-avatars.io/api/?name=Carlos+Mendoza&background=3498DB&color=fff',
-      score: 3100, 
-      change: '+95', 
-      trend: 'up',
-      certificates: 12,
-      web3Address: '0x5e6f...7g8h'
-    },
-    { 
-      rank: 3, 
-      name: 'Alex Rivera', 
-      avatar: 'https://ui-avatars.io/api/?name=Alex+Rivera&background=073B4C&color=fff',
-      score: 2875, 
-      change: '+120', 
-      trend: 'up',
-      certificates: 8,
-      web3Address: '0x9i0j...1k2l',
-      isCurrentUser: true
-    },
-    { 
-      rank: 4, 
-      name: 'María González', 
-      avatar: 'https://ui-avatars.io/api/?name=Maria+Gonzalez&background=E74C3C&color=fff',
-      score: 2850, 
-      change: '+80', 
-      trend: 'up',
-      certificates: 10,
-      web3Address: '0x3m4n...5o6p'
-    },
-    { 
-      rank: 5, 
-      name: 'Ana Silva', 
-      avatar: 'https://ui-avatars.io/api/?name=Ana+Silva&background=9B59B6&color=fff',
-      score: 2650, 
-      change: '-20', 
-      trend: 'down',
-      certificates: 7,
-      web3Address: '0x7q8r...9s0t'
-    }
-  ];
+  // Procesar datos para el componente
+  const processUserData = () => {
+    if (!userData || !examData) return null;
 
-  // Datos de certificaciones y exámenes
+    const totalExams = examData.length;
+    const passedExams = examData.filter(exam => exam.score > 0).length;
+    const totalScore = examData.reduce((sum, exam) => sum + exam.score, 0);
+    const averageScore = totalExams > 0 ? (totalScore / totalExams).toFixed(1) : 0;
+    
+    // Determinar nivel basado en puntaje promedio
+    let skillLevel = 'Beginner';
+    if (averageScore >= 2.5) skillLevel = 'Expert';
+    else if (averageScore >= 2) skillLevel = 'Advanced';
+    else if (averageScore >= 1.5) skillLevel = 'Intermediate';
+
+    return {
+      name: userData.name || 'Usuario',
+      avatar: `https://ui-avatars.io/api/?name=${encodeURIComponent(userData.name || 'Usuario')}&background=073B4C&color=fff`,
+      score: userData.totalScore || 0,
+      rank: userData.totalScore >= 90 ? 1 : userData.totalScore >= 85 ? 2 : userData.totalScore >= 80 ? 3 : 4,
+      completedCourses: totalExams,
+      certificatesEarned: passedExams,
+      examsPassed: passedExams,
+      totalStudyHours: totalExams * 2, // Estimación
+      weeklyProgress: 85,
+      skillLevel,
+      web3Verified: true,
+      stellarAddress: userData.stellarAddress
+    };
+  };
+
+  const processExamData = () => {
+    if (!examData) return [];
+
+    return examData.map((exam, index) => ({
+      name: exam.examName,
+      date: exam.timestamp,
+      level: exam.examType,
+      verified: exam.stellarTxSent,
+      score: exam.score,
+      hash: exam.stellarTxHash
+    })).slice(0, 4); // Mostrar solo los 4 más recientes
+  };
+
+  // Datos simulados para el leaderboard (se mantienen algunos datos de ejemplo)
+  const generateLeaderboard = (currentUser) => {
+    const baseUsers = [
+      { 
+        name: 'Sofia Chen', 
+        score: 95, 
+        change: '+15', 
+        trend: 'up',
+        certificates: 15,
+        web3Address: 'GD73MZR4...NFEN7OPV'
+      },
+      { 
+        name: 'Carlos Mendoza', 
+        score: 92, 
+        change: '+8', 
+        trend: 'up',
+        certificates: 12,
+        web3Address: 'GC45XYZ8...ABCD1234'
+      },
+      { 
+        name: 'María González', 
+        score: 88, 
+        change: '+12', 
+        trend: 'up',
+        certificates: 10,
+        web3Address: 'GA12BCD3...EFG56789'
+      },
+      { 
+        name: 'Ana Silva', 
+        score: 82, 
+        change: '-5', 
+        trend: 'down',
+        certificates: 7,
+        web3Address: 'GB78HIJ9...KLM01234'
+      },
+      { 
+        name: 'Pedro Ramírez', 
+        score: 78, 
+        change: '+3', 
+        trend: 'up',
+        certificates: 6,
+        web3Address: 'GF89LMN0...PQR56789'
+      }
+    ];
+
+    // Insertar usuario actual en la posición correcta
+    const userEntry = {
+      name: currentUser.name,
+      score: currentUser.score,
+      change: '+8',
+      trend: 'up',
+      certificates: currentUser.certificatesEarned,
+      web3Address: currentUser.stellarAddress ? 
+        currentUser.stellarAddress.substring(0, 8) + '...' + currentUser.stellarAddress.substring(-8) : 
+        'GD73MZR4...NFEN7OPV',
+      isCurrentUser: true
+    };
+
+    const allUsers = [...baseUsers, userEntry]
+      .sort((a, b) => b.score - a.score)
+      .map((user, index) => ({
+        ...user,
+        rank: index + 1,
+        avatar: `https://ui-avatars.io/api/?name=${encodeURIComponent(user.name)}&background=${
+          index === 0 ? '27AE60' : 
+          index === 1 ? '3498DB' : 
+          index === 2 ? 'E74C3C' : 
+          index === 3 ? '9B59B6' : '073B4C'
+        }&color=fff`
+      }));
+
+    return allUsers.slice(0, 6);
+  };
+
+  if (loading) {
+    return (
+      <Container maxWidth={false} sx={{ py: 4, px: 2, maxWidth: 'calc(100vw - 280px)' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+          <CircularProgress size={60} />
+          <Typography variant="h6" sx={{ ml: 2 }}>
+            Cargando datos del usuario...
+          </Typography>
+        </Box>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container maxWidth={false} sx={{ py: 4, px: 2, maxWidth: 'calc(100vw - 280px)' }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Error al cargar los datos: {error}
+        </Alert>
+      </Container>
+    );
+  }
+
+  const currentUser = processUserData();
+  const recentCertifications = processExamData();
+
+  if (!currentUser) return null;
+
+  const leaderboard = generateLeaderboard(currentUser);
+
+  // Calcular estadísticas de certificación
   const certificationData = {
-    totalCertificates: 8,
-    examsPassed: 24,
-    totalExams: 30,
-    passRate: 80,
-    recentCertificates: [
-      { name: 'Blockchain Fundamentals', date: '2024-12-15', level: 'Advanced', verified: true },
-      { name: 'Smart Contracts', date: '2024-11-28', level: 'Expert', verified: true },
-      { name: 'DeFi Protocols', date: '2024-10-20', level: 'Advanced', verified: true },
-      { name: 'Web3 Security', date: '2024-09-15', level: 'Intermediate', verified: true }
-    ]
+    totalCertificates: currentUser.certificatesEarned,
+    examsPassed: currentUser.examsPassed,
+    totalExams: currentUser.completedCourses,
+    passRate: currentUser.completedCourses > 0 ? 
+      Math.round((currentUser.examsPassed / currentUser.completedCourses) * 100) : 0,
+    recentCertificates: recentCertifications
   };
 
   return (
@@ -161,12 +276,28 @@ const Home = () => {
                           border: '3px solid #C1FF72'
                         }}
                       />
-                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 0.5 }}>
+                      <Typography variant="h6" fontWeight="bold" color="white" sx={{ mb: 0.5 }}>
                         {currentUser.name}
                       </Typography>
-                      <Typography variant="body2" sx={{ opacity: 0.8, mb: 1.5 }}>
+                      <Typography variant="body2" sx={{ opacity: 0.8, mb: 1.5, color: 'white' }}>
                         Nivel {currentUser.skillLevel}
                       </Typography>
+                      {currentUser.stellarAddress && (
+                        <Typography variant="caption" sx={{ 
+                          opacity: 0.7, 
+                          mb: 1, 
+                          display: 'block', 
+                          fontFamily: 'monospace', 
+                          color: 'white',
+                          wordBreak: 'break-all',
+                          fontSize: '0.65rem',
+                          lineHeight: 1.2,
+                          maxWidth: '200px',
+                          margin: '0 auto 8px auto'
+                        }}>
+                          {currentUser.stellarAddress.substring(0, 6)}...{currentUser.stellarAddress.substring(currentUser.stellarAddress.length - 6)}
+                        </Typography>
+                      )}
                       <Box sx={{ 
                         display: 'flex', 
                         justifyContent: 'center', 
@@ -174,7 +305,7 @@ const Home = () => {
                         mb: 1
                       }}>
                         <FaTrophy style={{ color: '#C1FF72', marginRight: '6px' }} />
-                        <Typography variant="subtitle1" fontWeight="bold">
+                        <Typography variant="subtitle1" fontWeight="bold" color="white">
                           Rank #{currentUser.rank}
                         </Typography>
                       </Box>
@@ -425,20 +556,40 @@ const Home = () => {
                         )}
                       </Box>
                       
-                      <Typography variant="caption" color="#666" sx={{ mb: 1, display: 'block' }}>
+                      <Typography variant="body2" color="#666" sx={{ mb: 1, display: 'block' }}>
                         {new Date(cert.date).toLocaleDateString('es-ES')}
                       </Typography>
                       
-                      <Chip 
-                        label={cert.level}
-                        size="small"
-                        color={
-                          cert.level === 'Expert' ? 'error' :
-                          cert.level === 'Advanced' ? 'warning' : 'info'
-                        }
-                        variant="outlined"
-                        sx={{ fontWeight: 'bold', fontSize: '0.7rem' }}
-                      />
+                      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+                        <Chip 
+                          label={cert.level}
+                          size="small"
+                          color={
+                            cert.level === 'Avanzado' ? 'error' :
+                            cert.level === 'Intermedio' ? 'warning' : 'info'
+                          }
+                          variant="outlined"
+                          sx={{ fontWeight: 'bold', fontSize: '0.7rem' }}
+                        />
+                        {cert.hash && (
+                          <Chip 
+                            label="Blockchain"
+                            size="small"
+                            sx={{ 
+                              backgroundColor: '#C1FF72', 
+                              color: '#073B4C', 
+                              fontWeight: 'bold',
+                              fontSize: '0.6rem'
+                            }}
+                          />
+                        )}
+                      </Box>
+
+                      {cert.score && (
+                        <Typography variant="caption" color="#27AE60" sx={{ mt: 1, display: 'block', fontWeight: 'bold' }}>
+                          Puntuación: {cert.score}/3
+                        </Typography>
+                      )}
                     </Paper>
                   </Grid>
                 ))}

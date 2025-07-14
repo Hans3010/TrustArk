@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Tooltip,
@@ -8,6 +8,7 @@ import {
   Paper,
   Divider,
 } from '@mui/material';
+import { getUserProfile } from '../../services/userService';
 import {
   FaUser,
   FaCode,
@@ -46,6 +47,33 @@ import {
 
 const Sidebar = ({ currentPage, setCurrentPage }) => {
   const [selectedServer, setSelectedServer] = useState('home');
+  const [userName, setUserName] = useState('Usuario TrustArk'); // Estado por defecto
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+
+  // Función para obtener el nombre del usuario desde el endpoint
+  const fetchUserName = async () => {
+    try {
+      setIsLoadingUser(true);
+      
+      // Usar el servicio para obtener los datos del usuario
+      const userData = await getUserProfile();
+      
+      // Establecer el nombre del usuario
+      setUserName(userData.name || userData.username || 'Usuario TrustArk');
+      
+    } catch (error) {
+      console.error('Error al obtener el nombre del usuario:', error);
+      // Mantiene el valor por defecto en caso de error
+      setUserName('Usuario TrustArk');
+    } finally {
+      setIsLoadingUser(false);
+    }
+  };
+
+  // Efecto para cargar el nombre del usuario al montar el componente
+  useEffect(() => {
+    fetchUserName();
+  }, []);
 
   const servers = [
     { id: 'home', icon: FaHome, name: 'Dashboard', color: '#3498DB' },
@@ -571,7 +599,7 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
               color: '#e4dfda',
               truncate: true,
             }}>
-            Usuario TrustArk
+            {isLoadingUser ? 'Cargando...' : userName}
           </Typography>
           <Typography
             variant="caption"
