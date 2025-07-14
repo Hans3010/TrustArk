@@ -6,6 +6,7 @@ import Finanzas from './pages/Finanzas';
 import Profile from './pages/Profile';
 import ProfileStats from './pages/ProfileStats';
 import ProfileEdit from './pages/ProfileEdit';
+import Home from './pages/Home'
 // Páginas específicas de exámenes
 import ExamPage from './pages/ExamPage';
 import MiScore from './pages/MiScore';
