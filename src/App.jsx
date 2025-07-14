@@ -13,7 +13,7 @@ import Leaderboard from './pages/Leaderboard';
 import useNavigation from './hooks/useNavigation';
 
 function App() {
-  const { currentPage, setCurrentPage } = useNavigation('profile');
+  const { currentPage, setCurrentPage } = useNavigation('home');
 
   const renderPage = () => {
     switch (currentPage) {
@@ -92,7 +92,7 @@ function App() {
         return <Leaderboard />;
 
       default:
-        return <Profile />;
+        return <Home />;
     }
   };
 

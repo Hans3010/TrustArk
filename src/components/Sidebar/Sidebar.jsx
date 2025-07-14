@@ -38,15 +38,17 @@ import {
   FaBitcoin,
   FaSeedling,
   FaClipboardList,
+  FaHome,
   FaCoins,
   FaPlus,
   FaCog,
 } from 'react-icons/fa';
 
 const Sidebar = ({ currentPage, setCurrentPage }) => {
-  const [selectedServer, setSelectedServer] = useState('profile');
+  const [selectedServer, setSelectedServer] = useState('home');
 
   const servers = [
+    { id: 'home', icon: FaHome, name: 'Dashboard', color: '#3498DB' },
     { id: 'profile', icon: FaUser, name: 'Mi Perfil', color: '#c1ff72' },
     { id: 'desarrollo', icon: FaCode, name: 'Desarrollo', color: '#4CAF50' },
     { id: 'diseno', icon: FaPaintBrush, name: 'Diseño', color: '#E91E63' },
@@ -56,6 +58,11 @@ const Sidebar = ({ currentPage, setCurrentPage }) => {
 
   const getServerChannels = (serverId) => {
     const channels = {
+      home: [
+        { id: 'home', name: 'Dashboard', icon: FaHome },
+        { id: 'leaderboard', name: 'Ranking Global', icon: FaTrophy },
+        { id: 'mi-score', name: 'Mi Puntaje', icon: FaStar },
+      ],
       profile: [
         { id: 'mi-score', name: 'Mi Puntaje', icon: FaStar },
         { id: 'leaderboard', name: 'Ranking Global', icon: FaTrophy },

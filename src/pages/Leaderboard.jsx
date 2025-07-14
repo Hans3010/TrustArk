@@ -1,168 +1,603 @@
+import React from 'react';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Container,
+  Paper,
+  Avatar,
+  Chip,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  LinearProgress,
+  Divider
+} from '@mui/material';
+import {
+  FaTrophy,
+  FaMedal,
+  FaStar,
+  FaChartLine,
+  FaCrown,
+  FaFire,
+  FaCode,
+  FaPalette,
+  FaChartPie,
+  FaServer,
+  FaCubes,
+  FaBullhorn,
+  FaCoins,
+  FaRocket,
+  FaUsers
+} from 'react-icons/fa';
+
 const Leaderboard = () => {
   const rankings = [
     {
       rank: 1,
       name: 'Alex Martinez',
       score: 4250,
-      specialty: 'Full Stack',
-      avatar: '🥇',
+      specialty: 'Full Stack Development',
+      avatar: 'https://ui-avatars.io/api/?name=Alex+Martinez&background=FFD700&color=000',
+      country: 'España',
+      change: '+85',
+      trend: 'up',
+      specialtyIcon: FaCode,
+      verified: true,
+      level: 'Expert'
     },
     {
       rank: 2,
       name: 'Sofia Chen',
       score: 4100,
       specialty: 'UI/UX Design',
-      avatar: '🥈',
+      avatar: 'https://ui-avatars.io/api/?name=Sofia+Chen&background=C0C0C0&color=000',
+      country: 'China',
+      change: '+62',
+      trend: 'up',
+      specialtyIcon: FaPalette,
+      verified: true,
+      level: 'Expert'
     },
     {
       rank: 3,
       name: 'Carlos Rodriguez',
       score: 3950,
-      specialty: 'DevOps',
-      avatar: '🥉',
+      specialty: 'DevOps Engineer',
+      avatar: 'https://ui-avatars.io/api/?name=Carlos+Rodriguez&background=CD7F32&color=000',
+      country: 'México',
+      change: '+41',
+      trend: 'up',
+      specialtyIcon: FaServer,
+      verified: true,
+      level: 'Expert'
     },
     {
       rank: 4,
       name: 'Elena Popov',
       score: 3850,
       specialty: 'Data Science',
-      avatar: '⭐',
+      avatar: 'https://ui-avatars.io/api/?name=Elena+Popov&background=9C27B0&color=fff',
+      country: 'Rusia',
+      change: '+38',
+      trend: 'up',
+      specialtyIcon: FaChartPie,
+      verified: true,
+      level: 'Advanced'
     },
     {
       rank: 5,
       name: 'Ahmed Hassan',
       score: 3720,
-      specialty: 'Blockchain',
-      avatar: '⭐',
+      specialty: 'Blockchain Developer',
+      avatar: 'https://ui-avatars.io/api/?name=Ahmed+Hassan&background=607D8B&color=fff',
+      country: 'Egipto',
+      change: '+29',
+      trend: 'up',
+      specialtyIcon: FaCubes,
+      verified: true,
+      level: 'Advanced'
     },
     {
       rank: 6,
       name: 'Maria Silva',
       score: 3680,
-      specialty: 'Marketing',
-      avatar: '⭐',
+      specialty: 'Digital Marketing',
+      avatar: 'https://ui-avatars.io/api/?name=Maria+Silva&background=FF9800&color=000',
+      country: 'Brasil',
+      change: '+15',
+      trend: 'up',
+      specialtyIcon: FaBullhorn,
+      verified: true,
+      level: 'Advanced'
     },
     {
       rank: 7,
       name: 'John Smith',
       score: 3590,
-      specialty: 'Finance',
-      avatar: '⭐',
+      specialty: 'Financial Analyst',
+      avatar: 'https://ui-avatars.io/api/?name=John+Smith&background=4CAF50&color=000',
+      country: 'EE.UU.',
+      change: '+12',
+      trend: 'up',
+      specialtyIcon: FaCoins,
+      verified: true,
+      level: 'Advanced'
     },
-    // Usuario actual
     {
       rank: 42,
-      name: 'Tú',
-      score: 3585,
-      specialty: 'Frontend',
-      avatar: '👤',
-      isUser: true,
+      name: 'Alex Rivera (Tú)',
+      score: 2875,
+      specialty: 'Frontend Developer',
+      avatar: 'https://ui-avatars.io/api/?name=Alex+Rivera&background=073B4C&color=fff',
+      country: 'Perú',
+      change: '+120',
+      trend: 'up',
+      specialtyIcon: FaCode,
+      verified: true,
+      level: 'Advanced',
+      isCurrentUser: true
     },
   ];
 
+  const currentUser = rankings.find(user => user.isCurrentUser);
+  const topUsers = rankings.filter(user => !user.isCurrentUser);
+
+  const getRankBadgeColor = (rank) => {
+    if (rank === 1) return '#FFD700';
+    if (rank === 2) return '#C0C0C0';
+    if (rank === 3) return '#CD7F32';
+    return '#E0E0E0';
+  };
+
+  const getLevelColor = (level) => {
+    switch(level) {
+      case 'Expert': return '#E74C3C';
+      case 'Advanced': return '#F39C12';
+      case 'Intermediate': return '#3498DB';
+      default: return '#95A5A6';
+    }
+  };
+
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <div className="mb-6">
-          <span className="text-6xl">🏆</span>
-        </div>
-        <h1 className="text-4xl font-bold text-[#c1ff72] mb-4">
-          Tabla de Posiciones Global
-        </h1>
-        <p className="text-xl text-[#e4dfda] opacity-90 mb-6">
-          Compite con desarrolladores y profesionales de todo el mundo
-        </p>
-      </div>
+    <Container maxWidth={false} sx={{ py: 3, px: 2, maxWidth: 'calc(100vw - 280px)' }}>
+      {/* Header Section */}
+      <Box sx={{ 
+        mb: 5, 
+        textAlign: 'center',
+        background: 'linear-gradient(135deg, #073B4C 0%, #0A5F73 100%)',
+        borderRadius: 4,
+        p: 5,
+        color: 'white',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Background decorative elements */}
+        <Box sx={{
+          position: 'absolute',
+          top: -20,
+          right: -20,
+          width: 100,
+          height: 100,
+          borderRadius: '50%',
+          backgroundColor: 'rgba(193, 255, 114, 0.1)',
+          zIndex: 1
+        }} />
+        <Box sx={{
+          position: 'absolute',
+          bottom: -30,
+          left: -30,
+          width: 80,
+          height: 80,
+          borderRadius: '50%',
+          backgroundColor: 'rgba(193, 255, 114, 0.08)',
+          zIndex: 1
+        }} />
+        
+        <Box sx={{ position: 'relative', zIndex: 2 }}>
+          <FaTrophy style={{ 
+            fontSize: '64px', 
+            color: '#C1FF72', 
+            marginBottom: '16px',
+            filter: 'drop-shadow(0 4px 8px rgba(193, 255, 114, 0.3))'
+          }} />
+          
+          <Typography 
+            variant="h2" 
+            fontWeight="bold" 
+            color="#C1FF72" 
+            sx={{ 
+              mb: 2,
+              textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+              background: 'linear-gradient(45deg, #C1FF72, #A8E063)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
+            Ranking Global TrustArk
+          </Typography>
+          
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            gap: 1,
+            mb: 2
+          }}>
+            <Box sx={{ 
+              width: 40, 
+              height: 1, 
+              backgroundColor: '#C1FF72',
+              opacity: 0.6
+            }} />
+            <FaStar style={{ color: '#C1FF72', fontSize: '16px' }} />
+            <Box sx={{ 
+              width: 40, 
+              height: 1, 
+              backgroundColor: '#C1FF72',
+              opacity: 0.6
+            }} />
+          </Box>
+          
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              mb: 3,
+              opacity: 0.95,
+              fontWeight: 300,
+              letterSpacing: '0.5px'
+            }}
+          >
+            Compite con profesionales de todo el mundo
+          </Typography>
+          
+          <Box sx={{ 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 2,
+            flexWrap: 'wrap'
+          }}>
+            <Chip 
+              icon={<FaCubes style={{ fontSize: '14px' }} />}
+              label="Validación Blockchain"
+              sx={{ 
+                backgroundColor: 'rgba(193, 255, 114, 0.2)',
+                color: '#C1FF72',
+                fontWeight: 'bold',
+                border: '1px solid rgba(193, 255, 114, 0.3)'
+              }}
+            />
+            <Chip 
+              icon={<FaChartLine style={{ fontSize: '14px' }} />}
+              label="Rankings en Tiempo Real"
+              sx={{ 
+                backgroundColor: 'rgba(193, 255, 114, 0.2)',
+                color: '#C1FF72',
+                fontWeight: 'bold',
+                border: '1px solid rgba(193, 255, 114, 0.3)'
+              }}
+            />
+            <Chip 
+              icon={<FaUsers style={{ fontSize: '14px' }} />}
+              label="Comunidad Global"
+              sx={{ 
+                backgroundColor: 'rgba(193, 255, 114, 0.2)',
+                color: '#C1FF72',
+                fontWeight: 'bold',
+                border: '1px solid rgba(193, 255, 114, 0.3)'
+              }}
+            />
+          </Box>
+        </Box>
+      </Box>
 
-      {/* Tu posición actual */}
-      <div className="bg-[#c1ff72] p-6 rounded-lg border-2 border-[#c1ff72]">
-        <div className="flex items-center justify-between text-[#222222]">
-          <div className="flex items-center space-x-4">
-            <div className="text-4xl">👤</div>
-            <div>
-              <h3 className="text-2xl font-bold">Tu Posición Actual</h3>
-              <p className="text-lg opacity-75">Ranking Global #42</p>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-3xl font-bold">3,585</div>
-            <div className="text-lg opacity-75">puntos</div>
-          </div>
-        </div>
-      </div>
+      <Grid container spacing={3}>
+        {/* Tu Posición Actual */}
+        <Grid item xs={12}>
+          <Card sx={{ 
+            borderRadius: 3, 
+            boxShadow: '0 8px 32px rgba(193, 255, 114, 0.3)',
+            border: '2px solid #C1FF72',
+            background: 'linear-gradient(135deg, #C1FF72 0%, #A8E063 100%)'
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                  <Avatar 
+                    src={currentUser.avatar}
+                    sx={{ 
+                      width: 80, 
+                      height: 80, 
+                      border: '4px solid #073B4C'
+                    }}
+                  />
+                  <Box>
+                    <Typography variant="h4" fontWeight="bold" color="#073B4C" sx={{ mb: 1 }}>
+                      Tu Posición Actual
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+                      <Typography variant="h5" color="#073B4C">
+                        Ranking Global #{currentUser.rank}
+                      </Typography>
+                      <Chip 
+                        label={currentUser.change}
+                        color="success"
+                        size="small"
+                        sx={{ fontWeight: 'bold' }}
+                      />
+                    </Box>
+                    <Typography variant="body1" color="#073B4C" sx={{ opacity: 0.8 }}>
+                      {currentUser.specialty} • {currentUser.country}
+                    </Typography>
+                  </Box>
+                </Box>
+                
+                <Box sx={{ textAlign: 'right' }}>
+                  <Typography variant="h3" fontWeight="bold" color="#073B4C">
+                    {currentUser.score.toLocaleString()}
+                  </Typography>
+                  <Typography variant="h6" color="#073B4C" sx={{ opacity: 0.8 }}>
+                    puntos
+                  </Typography>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
 
-      {/* Top 10 */}
-      <div className="bg-[#222222] p-6 rounded-lg border border-[#073b4c]">
-        <h2 className="text-2xl font-bold text-[#c1ff72] mb-6">Top Global</h2>
+        {/* Estadísticas Globales */}
+        <Grid item xs={12} md={3}>
+          <Paper sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
+            <FaCrown style={{ color: '#FFD700', fontSize: '32px', marginBottom: '8px' }} />
+            <Typography variant="h4" fontWeight="bold" color="#FFD700">
+              4,250
+            </Typography>
+            <Typography variant="body2" color="#666">
+              Puntuación Líder
+            </Typography>
+          </Paper>
+        </Grid>
 
-        <div className="space-y-3">
-          {rankings.map((user) => (
-            <div
-              key={user.rank}
-              className={`flex items-center justify-between p-4 rounded-lg transition-all ${
-                user.isUser
-                  ? 'bg-[#c1ff72] text-[#222222] border-2 border-[#c1ff72]'
-                  : 'bg-[#073b4c] hover:bg-[#0a4a5a]'
-              }`}>
-              <div className="flex items-center space-x-4">
-                <div
-                  className={`text-2xl font-bold w-8 text-center ${
-                    user.isUser ? 'text-[#222222]' : 'text-[#c1ff72]'
-                  }`}>
-                  #{user.rank}
-                </div>
+        <Grid item xs={12} md={3}>
+          <Paper sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
+            <FaFire style={{ color: '#E74C3C', fontSize: '32px', marginBottom: '8px' }} />
+            <Typography variant="h4" fontWeight="bold" color="#E74C3C">
+              127
+            </Typography>
+            <Typography variant="body2" color="#666">
+              Lugares Subidos
+            </Typography>
+          </Paper>
+        </Grid>
 
-                <div className="text-3xl">{user.avatar}</div>
+        <Grid item xs={12} md={3}>
+          <Paper sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
+            <FaChartLine style={{ color: '#27AE60', fontSize: '32px', marginBottom: '8px' }} />
+            <Typography variant="h4" fontWeight="bold" color="#27AE60">
+              2,875
+            </Typography>
+            <Typography variant="body2" color="#666">
+              Tu Puntuación
+            </Typography>
+          </Paper>
+        </Grid>
 
-                <div>
-                  <h3
-                    className={`font-semibold ${
-                      user.isUser ? 'text-[#222222]' : 'text-[#e4dfda]'
-                    }`}>
-                    {user.name}
-                  </h3>
-                  <p
-                    className={`text-sm opacity-75 ${
-                      user.isUser ? 'text-[#222222]' : 'text-[#e4dfda]'
-                    }`}>
-                    {user.specialty}
-                  </p>
-                </div>
-              </div>
+        <Grid item xs={12} md={3}>
+          <Paper sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
+            <FaRocket style={{ color: '#3498DB', fontSize: '32px', marginBottom: '8px' }} />
+            <Typography variant="h4" fontWeight="bold" color="#3498DB">
+              1,375
+            </Typography>
+            <Typography variant="body2" color="#666">
+              Para Top 10
+            </Typography>
+          </Paper>
+        </Grid>
 
-              <div className="text-right">
-                <div
-                  className={`text-xl font-bold ${
-                    user.isUser ? 'text-[#222222]' : 'text-[#c1ff72]'
-                  }`}>
-                  {user.score.toLocaleString()}
-                </div>
-                <div
-                  className={`text-sm opacity-75 ${
-                    user.isUser ? 'text-[#222222]' : 'text-[#e4dfda]'
-                  }`}>
-                  puntos
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+        {/* Ranking Table */}
+        <Grid item xs={12}>
+          <Card sx={{ borderRadius: 3, boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <FaTrophy style={{ color: '#F39C12', fontSize: '28px', marginRight: '12px' }} />
+                <Typography variant="h5" fontWeight="bold" color="#073B4C">
+                  Top Performers Global
+                </Typography>
+              </Box>
 
-      {/* Call to action */}
-      <div className="bg-[#222222] p-6 rounded-lg border border-[#073b4c] text-center">
-        <h3 className="text-[#c1ff72] font-semibold mb-3">
-          ¿Quieres subir en el ranking?
-        </h3>
-        <p className="text-[#e4dfda] opacity-75 mb-4">
-          Completa más evaluaciones y mejora tu score de confianza
-        </p>
-        <button className="bg-[#c1ff72] text-[#222222] px-8 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
-          Ver Exámenes Disponibles
-        </button>
-      </div>
-    </div>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: '#F8F9FA' }}>
+                      <TableCell sx={{ fontWeight: 'bold', color: '#073B4C' }}>Posición</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', color: '#073B4C' }}>Profesional</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', color: '#073B4C' }}>Especialidad</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', color: '#073B4C' }}>País</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', color: '#073B4C' }}>Puntuación</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', color: '#073B4C' }}>Cambio</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold', color: '#073B4C' }}>Nivel</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {topUsers.map((user) => {
+                      const SpecialtyIcon = user.specialtyIcon;
+                      return (
+                        <TableRow 
+                          key={user.rank}
+                          sx={{ 
+                            '&:hover': { backgroundColor: '#F8F9FA' },
+                            ...(user.rank <= 3 && { backgroundColor: '#FFF5E1' })
+                          }}
+                        >
+                          <TableCell>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Box sx={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: '50%',
+                                backgroundColor: getRankBadgeColor(user.rank),
+                                color: user.rank <= 3 ? '#000' : '#666',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 'bold',
+                                mr: 1,
+                                fontSize: '14px'
+                              }}>
+                                {user.rank}
+                              </Box>
+                              {user.rank <= 3 && (
+                                <FaMedal style={{ 
+                                  color: user.rank === 1 ? '#FFD700' : 
+                                        user.rank === 2 ? '#C0C0C0' : '#CD7F32',
+                                  fontSize: '16px'
+                                }} />
+                              )}
+                            </Box>
+                          </TableCell>
+                          
+                          <TableCell>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <Avatar 
+                                src={user.avatar} 
+                                sx={{ width: 36, height: 36, mr: 2 }}
+                              />
+                              <Box>
+                                <Typography 
+                                  variant="subtitle2" 
+                                  fontWeight="bold"
+                                  color="#073B4C"
+                                >
+                                  {user.name}
+                                </Typography>
+                                {user.verified && (
+                                  <Chip 
+                                    label="Verificado"
+                                    size="small"
+                                    color="success"
+                                    variant="outlined"
+                                    sx={{ fontSize: '10px', height: '18px' }}
+                                  />
+                                )}
+                              </Box>
+                            </Box>
+                          </TableCell>
+                          
+                          <TableCell>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              <SpecialtyIcon style={{ 
+                                color: '#666', 
+                                fontSize: '16px', 
+                                marginRight: '8px' 
+                              }} />
+                              <Typography variant="body2" color="#666">
+                                {user.specialty}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          
+                          <TableCell>
+                            <Typography variant="body2" color="#666">
+                              {user.country}
+                            </Typography>
+                          </TableCell>
+                          
+                          <TableCell>
+                            <Typography variant="h6" fontWeight="bold" color="#073B4C">
+                              {user.score.toLocaleString()}
+                            </Typography>
+                          </TableCell>
+                          
+                          <TableCell>
+                            <Chip 
+                              label={user.change}
+                              size="small"
+                              color="success"
+                              variant="outlined"
+                              sx={{ fontWeight: 'bold' }}
+                            />
+                          </TableCell>
+                          
+                          <TableCell>
+                            <Chip 
+                              label={user.level}
+                              size="small"
+                              sx={{
+                                backgroundColor: getLevelColor(user.level) + '20',
+                                color: getLevelColor(user.level),
+                                fontWeight: 'bold'
+                              }}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Call to Action */}
+        <Grid item xs={12}>
+          <Card sx={{ 
+            borderRadius: 3, 
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+            background: 'linear-gradient(135deg, #073B4C 0%, #0A5F73 100%)',
+            color: 'white'
+          }}>
+            <CardContent sx={{ p: 4, textAlign: 'center' }}>
+              <FaRocket style={{ fontSize: '48px', color: '#C1FF72', marginBottom: '16px' }} />
+              
+              <Typography variant="h4" fontWeight="bold" color="#C1FF72" sx={{ mb: 2 }}>
+                ¿Quieres escalar posiciones?
+              </Typography>
+              
+              <Typography variant="h6" sx={{ mb: 3, opacity: 0.9 }}>
+                Completa más evaluaciones, obtén certificaciones y mejora tu score de confianza
+              </Typography>
+              
+              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Button 
+                  variant="contained"
+                  size="large"
+                  sx={{ 
+                    backgroundColor: '#C1FF72', 
+                    color: '#073B4C',
+                    fontWeight: 'bold',
+                    '&:hover': { backgroundColor: '#A8E063' }
+                  }}
+                >
+                  Ver Exámenes Disponibles
+                </Button>
+                
+                <Button 
+                  variant="outlined"
+                  size="large"
+                  sx={{ 
+                    borderColor: '#C1FF72', 
+                    color: '#C1FF72',
+                    fontWeight: 'bold',
+                    '&:hover': { borderColor: '#A8E063', backgroundColor: 'rgba(193, 255, 114, 0.1)' }
+                  }}
+                >
+                  Obtener Certificaciones
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 
